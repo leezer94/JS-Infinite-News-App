@@ -32,5 +32,15 @@ export const CATEGORIES = {
 export const ALTERNATIVE = {
   IMG: 'img/img-not-found.jpeg',
   DESCRIPTION:
-    'Your browser isnt supported anymore. Update it to get the best YouTube experience and our latest features. Learn more Remind me later',
+    "Your browser isn't supported anymore. Update it to get the best YouTube experience and our latest features. Learn more Remind me later",
+};
+
+export const POSITION = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+export const CLASSLIST = {
+  ACTIVE: 'active',
+  ITEM: 'category-item',
 };
