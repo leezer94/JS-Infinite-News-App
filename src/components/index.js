@@ -1,36 +1,31 @@
-import { CATEGORIES } from '../common/constants.js';
+import { CATEGORIES, POSITION } from '../common/constants.js';
 import { navTemplate } from './Nav/NavTemplate.js';
 import { newsListSectionTemplate } from './NavList/newsListTemplate.js';
 import { render } from '../common/utils.js';
-import { renderNewsSection } from './NavList/NewsList.js';
+import { loadMoreNews, renderNewsSection } from './NavList/NewsList.js';
 import { switchCategory, activateCategoryBtn } from './Nav/Nav.js';
+import { $ } from '../common/DOM.js';
 
 export const renderNewsPage = (target) => {
-  render(target, 'afterbegin', navTemplate(CATEGORIES));
-  render(target, 'beforeend', newsListSectionTemplate());
+  render(target, POSITION.AFTERBEGIN, navTemplate(CATEGORIES));
+  render(target, POSITION.BEFOREEND, newsListSectionTemplate());
 
-  renderNewsSection();
+  renderNewsSection(POSITION.AFTERBEGIN);
 };
 
-// const handleScroll = () => {
-//   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+const observer = new IntersectionObserver((entries) => {
+  const categoryList = [...$('.category-list > ul').children];
+  const newsList = $('.news-list');
 
-//   let currentPage = 1;
-//   let total = 10;
-//   const end = 100;
+  let page =
+    Math.abs(document.getElementsByClassName('news-item').length / 5) + 1;
 
-//   if (total === end) {
-//     window.removeEventListener('scroll', handleScroll);
-//     return;
-//   }
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
 
-//   if (scrollTop + clientHeight >= scrollHeight - 5) {
-//     currentPage++;
-//     total += 10;
-
-//     return;
-//   }
-// };
+    loadMoreNews(categoryList, newsList, page);
+  });
+});
 
 export const bindEventListeners = (rootElement) => {
   rootElement.addEventListener('click', ({ target }) => {
@@ -38,5 +33,5 @@ export const bindEventListeners = (rootElement) => {
     activateCategoryBtn(target);
   });
 
-  // window.addEventListener('scroll', () => {});
+  observer.observe($('.scroll-observer'));
 };
