@@ -1,5 +1,5 @@
 import Component from './core/Component.js';
-import { CATEGORIES } from '../common/constants.js';
+import { CATEGORIES, CLASSLIST } from '../common/constants.js';
 
 export default class Nav extends Component {
   constructor(...rest) {
@@ -21,7 +21,7 @@ export default class Nav extends Component {
   }
   componentDidMount() {
     this.$target.addEventListener('click', ({ target }) => {
-      if (!target.classList.contains('category-item')) return;
+      if (!target.classList.contains(CLASSLIST.ITEM)) return;
       this.switchCategory(target);
       // this.addActive(target);
     });

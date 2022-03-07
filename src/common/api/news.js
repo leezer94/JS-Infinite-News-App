@@ -1,6 +1,10 @@
 import { CATEGORIES } from '../constants.js';
 
 export const getNews = async (currentCategory, page = 1) => {
+  document.cookie = 'safeCookie1foo; SameSite=Lax';
+  document.cookie = 'safeCookie1foo';
+  document.cookie = 'crossCookie=bar; SameSite=None; Secure';
+
   let index = 5;
 
   try {
@@ -14,6 +18,7 @@ export const getNews = async (currentCategory, page = 1) => {
 
     return articles;
   } catch (error) {
-    console.error(error.message);
+    // 보통 이미지를 가져오지 못하는 경우
+    console.error(error);
   }
 };

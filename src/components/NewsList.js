@@ -1,4 +1,6 @@
-import { ALTERNATIVE } from '../common/constants.js';
+import { getNews } from '../common/api/news.js';
+import { ALTERNATIVE, POSITION } from '../common/constants.js';
+import { $ } from '../common/utils.js';
 import Component from './core/Component.js';
 
 export default class NavList extends Component {
@@ -22,7 +24,7 @@ export default class NavList extends Component {
                 .map((article) => {
                   let { url, urlToImage, title, description } = article;
 
-                  if (!urlToImage) urlToImage = 'img/img-not-found.jpeg';
+                  if (!urlToImage) urlToImage = '../../img/img-not-found.jpeg';
 
                   if (!description) description = ALTERNATIVE.DESCRIPTION;
 
@@ -50,5 +52,42 @@ export default class NavList extends Component {
     `;
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { categoryName } = this.props;
+
+    this.observeIntersection(categoryName);
+  }
+
+  observeIntersection(categoryName) {
+    const observer = new IntersectionObserver((entries) => {
+      const page = Math.floor($('.news-list').children.length / 5) + 1;
+
+      // 최대 로딩 가능한 페이지 수  5 로 설정
+      let total = 5;
+
+      if (page === total) return;
+
+      entries.forEach(async (entry) => {
+        if (!entry.isIntersecting) return;
+
+        const articles = await getNews(categoryName, page);
+
+        articles.map((article) => {
+          let { url, urlToImage, title, description } = article;
+
+          if (!urlToImage) urlToImage = 'img/img-not-found.jpeg';
+
+          if (!description) description = ALTERNATIVE.DESCRIPTION;
+
+          this.loadMoreNews(
+            $('.news-list'),
+            POSITION.BEFOREEND,
+            this.newsTemplate(url, urlToImage, title, description)
+          );
+        });
+      });
+    });
+
+    observer.observe($('.scroll-observer'));
+  }
 }
