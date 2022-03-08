@@ -1,4 +1,4 @@
-import App from './src/App.js';
+import { App } from './src/App.js';
 import { $ } from './src/common/utils.js';
 
 //  samesite Cookie issue
