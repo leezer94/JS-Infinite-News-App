@@ -1,5 +1,5 @@
-import { App } from './src/App.js';
-import { $ } from './src/common/utils.js';
+import { App } from './App.js';
+import { $ } from './common/utils.js';
 
 //  samesite Cookie issue
 document.cookie = 'safeCookie1foo; SameSite=Lax';
